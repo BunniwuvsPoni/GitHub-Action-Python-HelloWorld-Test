@@ -1,5 +1,5 @@
 def add(x: int, y: int) -> int:
-    """add two numbers together
+    """add two numbers togetherd
 
     Args:
                     x (int): first number to add
