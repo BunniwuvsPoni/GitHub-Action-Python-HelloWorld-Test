@@ -2,7 +2,7 @@
 name: Python Application - GitHub Action Workflow
 
 # The run name for workflow runs
-run-name: GitHub Run ID (${{ github.run_id }}) triggered by @${{ github.actor }}
+run-name: GitHub Run ID (${{ github.run_id }}) by (@${{ github.actor }})
 
 # Event trigger, in this case push
 on: [push]
@@ -41,15 +41,16 @@ jobs:
           python -m pip install --upgrade pip
           # If exists, install requirements.txt packages
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Test with pytest
+        run: |
+          # Install pytest and pytest-cov
+          pip install pytest pytest-cov
+          # Run tests
+          pytest --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
       - name: Lint with ruff
         run: |
           # Install ruff
           pip install ruff
           # Lint with ruff
           ruff check --output-format=github .
-      - name: Test with pytest
-        run: |
-          # Install pytest
-          pip install pytest
-          # Test with pytest
-          pytest
+
