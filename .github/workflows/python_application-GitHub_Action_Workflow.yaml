@@ -2,7 +2,7 @@
 name: Python Application - GitHub Action Workflow
 
 # The run name for workflow runs
-run-name: GitHub Run ID: ${{ github.run_id }} by @${{ github.actor }}
+run-name: GitHub Run ID ${{ github.run_id }} by @${{ github.actor }}
 
 # Event trigger, in this case push
 on: [push]
