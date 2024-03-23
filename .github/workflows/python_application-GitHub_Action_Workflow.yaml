@@ -1,3 +1,5 @@
+# Put this file in GitHub: (Repository)/.github/workflow/(File Name).yml
+
 # Name of the GitHub Action Workflow
 name: Python Application - GitHub Action Workflow
 
@@ -31,7 +33,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           # You can test your matrix by printing the current Python version
-      # Shows the Python version
+      # Shows the current Python version
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
       # Installs dependencies
@@ -41,16 +43,17 @@ jobs:
           python -m pip install --upgrade pip
           # If exists, install requirements.txt packages
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+     # Test with pytest
       - name: Test with pytest
         run: |
           # Install pytest and pytest-cov
           pip install pytest pytest-cov
           # Run tests
           pytest --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+      # Lint with ruff
       - name: Lint with ruff
         run: |
           # Install ruff
           pip install ruff
           # Lint with ruff
           ruff check --output-format=github .
-
