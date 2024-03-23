@@ -1,8 +1,8 @@
 # Name of the GitHub Action Workflow
 name: Python application
 
-# The name for workflow runs generated from the workflow
-run-name: Deploy to ${{ inputs.deploy_target }} by @${{ github.actor }}
+# The run name for workflow runs
+run-name: ${{ github.run_id }} by @${{ github.actor }}
 
 # Event trigger, in this case push
 on: [push]
@@ -46,7 +46,7 @@ jobs:
           # Install ruff
           pip install ruff
           # Lint with ruff
-          ruff --output-format=github .
+          ruff check --output-format=github .
       - name: Test with pytest
         run: |
           # Install pytest
