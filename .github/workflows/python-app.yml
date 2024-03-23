@@ -1,38 +1,55 @@
+# Name of the GitHub Action Workflow
 name: Python application
 
+# The name for workflow runs generated from the workflow
+run-name: Deploy to ${{ inputs.deploy_target }} by @${{ github.actor }}
+
+# Event trigger, in this case push
 on: [push]
 
+# Pemissions, contents: read permits an action to list the commits
 permissions:
   contents: read
 
+# Workflow starts here
 jobs:
   build:
 
+    # Uses the latest ubuntu version
     runs-on: ubuntu-latest
+    # Tests against multiple python versions
     strategy:
       matrix:
         python-version: ["pypy3.9", "pypy3.10", "3.9", "3.10", "3.11", "3.12"]
 
     steps:
+      # Checks out the repository
       - uses: actions/checkout@v4
+      # Installs Python
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
           # You can test your matrix by printing the current Python version
+      # Shows the Python version
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
+      # Installs dependencies
       - name: Install dependencies
         run: |
+          # Upgrades pip
           python -m pip install --upgrade pip
-          pip install ruff pytest
+          # If exists, install requirements.txt packages
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Lint with ruff
         run: |
-          # stop the build if there are Python syntax errors or undefined names
-          ruff --format=github --select=E9,F63,F7,F82 --target-version=py37 .
-          # default set of ruff rules with GitHub Annotations
-          ruff --format=github --target-version=py37 .
+          # Install ruff
+          pip install ruff
+          # Lint with ruff
+          ruff --output-format=github .
       - name: Test with pytest
         run: |
+          # Install pytest
+          pip install pytest
+          # Test with pytest
           pytest
